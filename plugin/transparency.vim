@@ -16,6 +16,7 @@ set cpo&vim
 
 let g:transparency_activate = 0
 if !has('gui_running')
+  " echomsg "non gui"
   finish
 else
   if has('win32') || has('win64')
@@ -23,16 +24,19 @@ else
     if empty(dll)
       let dll = get(split(globpath(&rtp, has('win64') ? 'vimtweak64.dll' : 'vimtweak32.dll'), '\n'), 0, '')
       if empty(dll)
+        " echomsg "no dll"
         finish
       endif
     endif
     let g:transparency_windows_dll = dll
   elseif has('mac')
     if !has('transparency')
+      " echomsg "no opt"
       finish
     endif
   else
     if !executable('transset-df') || !has('float')
+      " echomsg "no cmd"
       finish
     endif
   endif
