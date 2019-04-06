@@ -14,9 +14,27 @@ Gvim transparency
 - Linux and other (X11 Window System)
   - transset-df command
 
-## Need IF
-- Startup time setting
-- FocusGained / FocusLost setting
+## Setting
+
+Value as percent transparency (0 is full/100 is non-trans).
+Members are active / inactive value.
+
+```vim
+let g:transparency_config = {
+      \  'active'   : 50,
+      \  'inactive' : 20
+      \ }
+```
+
+Startup autocmd setting `g:transparency_startup_enable (default 1)`
+
+## Keymap
+
+```vim
+map <Plug>TransparencyOn
+map <Plug>TransparencyOff
+map <Plug>TransparencyToggle
+```
 
 ## License
 MIT
