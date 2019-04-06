@@ -19,42 +19,22 @@ if !has('gui_running')
   finish
 else
   if has('win32') || has('win64')
-    let s:dll = get(g:, 'vimtweak_dll_path', '')
-    if empty(s:dll)
-      let s:dll = get(split(globpath(&rtp, has('win64') ? 'vimtweak64.dll' : 'vimtweak32.dll'), '\n'), 0, '')
-      if empty(s:dll)
+    let dll = get(g:, 'vimtweak_dll_path', '')
+    if empty(dll)
+      let dll = get(split(globpath(&rtp, has('win64') ? 'vimtweak64.dll' : 'vimtweak32.dll'), '\n'), 0, '')
+      if empty(dll)
         finish
       endif
     endif
-
-    " v 0 to 100 % transparent value 0 is all-transparent 100 is non-transparent
-    function! s:Transparency(v)
-      " byte 255 to 0(alpha value) -> converted 0 to 255 transparent step(integer)
-      let v = (a:v * 255) / 100
-      call libcallnr(s:dll, 'SetAlpha', 255-v)
-    endfunction
-
+    let g:transparency_windows_dll = dll
   elseif has('mac')
     if !has('transparency')
       finish
     endif
-
-    function! s:Transparency(v)
-      " % 100 to 0(alpha percent) -> converted 0 to 100 transparent step(percent integer)
-      let v = 100 - a:v
-      let &transparency=v
-    endfunction
   else
     if !executable('transset-df') || !has('float')
       finish
     endif
-
-    function! s:Transparency(v)
-      " % 0 to 1 transparent step(float)
-      let v = floor(a:v) * 0.01
-      let cmd = ['transset-df', '--id', string(v:windowid), string(v)]
-      call system(join(cmd))
-    endfunction
   endif
 endif
 let g:transparency_activate = 1
@@ -72,11 +52,11 @@ function! s:Install(flag)
     autocmd!
     if a:flag =~# '^\(1\|[tT]rue\|[yY]es\)$'
       let g:transparency_enabled = 1
-      autocmd FocusGained * call s:Transparency(g:transparency_config.inactive)
-      autocmd FocusLost   * call s:Transparency(g:transparency_config.active)
+      autocmd FocusGained * call transparency#set(g:transparency_config.inactive)
+      autocmd FocusLost   * call transparency#set(g:transparency_config.active)
     else
       let g:transparency_enabled = 0
-      call s:Transparency(100)
+      call transparency#set(100)
     endif
   augroup END
 endfunction
