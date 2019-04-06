@@ -65,9 +65,9 @@ function! s:Install(flag)
   augroup END
 endfunction
 
-map <Plug>TransparencyOn     :call <SID>Install('True')
-map <Plug>TransparencyOff    :call <SID>Install('False')
-map <Plug>TransparencyToggle :call <SID>Install(g:transparency_enabled ? 'False' : 'True')
+map <Plug>TransparencyOn     call <SID>Install('True')
+map <Plug>TransparencyOff    call <SID>Install('False')
+map <Plug>TransparencyToggle call <SID>Install(g:transparency_enabled ? 'False' : 'True')
 
 if get(g:,'transparency_startup_enable',1)
   call s:Install('True')

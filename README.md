@@ -12,7 +12,7 @@ Gvim transparency
 - Mac
   - MacVim / support `transparency` option.
 - Linux and other (X11 Window System)
-  - transset-df command
+  - `transset-df` command
 
 ## Setting
 
@@ -26,7 +26,7 @@ let g:transparency_config = {
       \ }
 ```
 
-Startup autocmd setting `g:transparency_startup_enable (default 1)`
+Startup autocmd setting `g:transparency_startup_enable` (default 1)
 
 ## Keymap
 
