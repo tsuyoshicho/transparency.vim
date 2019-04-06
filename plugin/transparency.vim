@@ -1,10 +1,18 @@
+"=============================================================================
+" File: transparency.vim
+" Author: Tsuyoshi CHO
+" Created: 2019-04-06
+"=============================================================================
+
 scriptencoding utf-8
 
-if &cp || (exists('g:loaded_transparency_windows_vim') && g:loaded_transparency_windows_vim)
-  finish
+if exists('g:loaded_transparency')
+    finish
 endif
+let g:loaded_transparency = 1
 
-let g:loaded_transparency_windows_vim = 1
+let s:save_cpo = &cpo
+set cpo&vim
 
 if !has('gui_running') || (!has('win32') && !has('win64'))
   finish
@@ -19,7 +27,7 @@ if empty(s:dll)
 endif
 
 function! s:Transparency(v)
-  call libcallnr(s:dll, 'SetAlpha', 255-a:v) 
+  call libcallnr(s:dll, 'SetAlpha', 255-a:v)
 endfunction
 
 function! s:Install(flag)
@@ -35,3 +43,6 @@ endfunction
 command! -nargs=1 Transparency call <SID>Install(<f-args>)
 
 Transparency Yes
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
