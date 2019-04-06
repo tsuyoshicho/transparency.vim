@@ -43,7 +43,7 @@ else
 endif
 let g:transparency_activate = 1
 
-let g:transparency_config = add(get(g:,'transparency_config',{}),
+let g:transparency_config = extend(get(g:,'transparency_config',{}),
       \ {
       \  'active'   : 50,
       \  'inactive' : 20
