@@ -14,15 +14,17 @@ let g:loaded_transparency = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-if !has('gui_running') || (!has('win32') && !has('win64'))
+if !has('gui_running')
   finish
-endif
-
-let s:dll = get(g:, 'vimtweak_dll_path', '')
-if empty(s:dll)
-  let s:dll = get(split(globpath(&rtp, has('win64') ? 'vimtweak64.dll' : 'vimtweak32.dll'), '\n'), 0, '')
-  if empty(s:dll)
-    finish
+else
+  if has('win32') || has('win64')
+    let s:dll = get(g:, 'vimtweak_dll_path', '')
+    if empty(s:dll)
+      let s:dll = get(split(globpath(&rtp, has('win64') ? 'vimtweak64.dll' : 'vimtweak32.dll'), '\n'), 0, '')
+      if empty(s:dll)
+        finish
+      endif
+    endif
   endif
 endif
 
