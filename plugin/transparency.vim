@@ -45,8 +45,8 @@ let g:transparency_activate = 1
 
 let g:transparency_config = extend(get(g:,'transparency_config',{}),
       \ {
-      \  'active'   : 50,
-      \  'inactive' : 20
+      \  'active'   : 90,
+      \  'inactive' : 70
       \ }
       \)
 
@@ -56,8 +56,9 @@ function! s:Install(flag)
     autocmd!
     if a:flag =~# '^\(1\|[tT]rue\|[yY]es\)$'
       let g:transparency_enabled = 1
-      autocmd FocusGained * call transparency#set(g:transparency_config.inactive)
-      autocmd FocusLost   * call transparency#set(g:transparency_config.active)
+      autocmd FocusGained * call transparency#set(g:transparency_config.active)
+      autocmd FocusLost   * call transparency#set(g:transparency_config.inactive)
+      call transparency#set(g:transparency_config.active)
     else
       let g:transparency_enabled = 0
       call transparency#set(100)

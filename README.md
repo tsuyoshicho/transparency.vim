@@ -21,8 +21,8 @@ Members are active / inactive value.
 
 ```vim
 let g:transparency_config = {
-      \  'active'   : 50,
-      \  'inactive' : 20
+      \  'active'   : 90,
+      \  'inactive' : 70
       \ }
 ```
 
@@ -31,9 +31,10 @@ Startup autocmd setting `g:transparency_startup_enable` (default 1)
 ## Keymap
 
 ```vim
-map <Plug>TransparencyOn
-map <Plug>TransparencyOff
-map <Plug>TransparencyToggle
+" ex
+nmap <F3> <Plug>(TransparencyOn)
+nmap <F4> <Plug>(TransparencyOff)
+nmap <F5> <Plug>(TransparencyToggle)
 ```
 
 ## License
