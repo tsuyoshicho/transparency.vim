@@ -7,7 +7,7 @@
 scriptencoding utf-8
 
 if exists('g:loaded_transparency')
-    finish
+  finish
 endif
 let g:loaded_transparency = 1
 
@@ -40,8 +40,9 @@ else
     endif
 
     function! s:Transparency(v)
-      " % 0 to 100 transparent step(percent integer)
-      let &transparency=a:v
+      " % 100 to 0(alpha percent) -> converted 0 to 100 transparent step(percent integer)
+      let v = 100 - a:v
+      let &transparency=v
     endfunction
   else
     if !executable('transset-df') || !has('float')
@@ -50,8 +51,9 @@ else
 
     function! s:Transparency(v)
       " % 0 to 1 transparent step(float)
-      let v = floor(a:v) * 0.01 " WIP not work yet
-      call system('transset-df --id ' . v:windowid . ' ' . v)
+      let v = floor(a:v) * 0.01
+      let cmd = ['transset-df', '--id', string(v:windowid), string(v)]
+      call system(join(cmd))
     endfunction
   endif
 endif
@@ -64,6 +66,7 @@ let g:transparency_config = add(get(g:,'transparency_config',{}),
       \ }
       \)
 
+let g:transparency_enabled = 0
 function! s:Install(flag)
   augroup Transparency
     autocmd!
@@ -74,13 +77,17 @@ function! s:Install(flag)
     else
       let g:transparency_enabled = 0
       call s:Transparency(100)
-   endif
+    endif
   augroup END
 endfunction
 
 map <Plug>TransparencyOn     :call <SID>Install('True')
 map <Plug>TransparencyOff    :call <SID>Install('False')
 map <Plug>TransparencyToggle :call <SID>Install(g:transparency_enabled ? 'False' : 'True')
+
+if get(g:,'transparency_startup_enable',1)
+  call s:Install('True')
+endif
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
