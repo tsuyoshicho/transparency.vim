@@ -47,7 +47,8 @@ let g:transparency_config = extend(get(g:,'transparency_config',{}),
       \ {
       \  'active'   : 90,
       \  'inactive' : 70
-      \ }
+      \ },
+      \ 'keep'
       \)
 
 let g:transparency_enabled = 0
