@@ -57,7 +57,7 @@ let g:transparency_config = extend(get(g:,'transparency_config',{}),
 " use inner
 let s:transparency_enabled = 0
 
-# autocmd installer
+" autocmd installer
 function! s:install(flag)
   augroup TransparencyGUI
     autocmd!
@@ -75,7 +75,7 @@ endfunction
 if g:transparency_activate
   noremap <silent> <Plug>(TransparencyOn)     :call <SID>install(v:true)<CR>
   noremap <silent> <Plug>(TransparencyOff)    :call <SID>install(v:false)<CR>
-  noremap <silent> <Plug>(TransparencyToggle) :call <SID>install(!s:transparency_enabled)<CR>
+  noremap <silent> <Plug>(TransparencyToggle) :call <SID>install(!<SID>transparency_enabled)<CR>
   if g:transparency_startup_enable
     call s:install(v:true)
   endif
