@@ -40,27 +40,10 @@ function! s:check_active() abort
   return 1
 endfunction
 
-function! s:install(flag)
-  augroup Transparency
-    autocmd!
-    if a:flag
-      autocmd FocusGained * call transparency#set(g:transparency_config.active)
-      autocmd FocusLost   * call transparency#set(g:transparency_config.inactive)
-      call transparency#set(g:transparency_config.active)
-    else
-      call transparency#set(100)
-    endif
-  augroup END
-  let g:transparency_enabled = a:flag
-endfunction
-
 " work status
-let g:transparency_activate       = s:check_active()
+let g:transparency_activate       = get(g:, 'transparency_activate', s:check_active())
 let g:transparency_startup_enable = get(g:, 'transparency_startup_enable', 1)
 let g:transparency_ctermbg_none   = get(g:, 'transparency_ctermbg_none', 0)
-
-" use inner
-let g:transparency_enabled = 0
 
 " user config
 let g:transparency_config = extend(get(g:,'transparency_config',{}),
@@ -71,24 +54,58 @@ let g:transparency_config = extend(get(g:,'transparency_config',{}),
       \ 'keep'
       \)
 
+" use inner
+let s:transparency_enabled = 0
+
+" enable check
+function! s:transparency_is_enable() abort
+  return s:transparency_enabled
+endfunction
+
+" autocmd installer
+function! s:install(flag) abort
+  augroup TransparencyGUI
+    autocmd!
+    if a:flag
+      autocmd FocusGained * call transparency#set(g:transparency_config.active)
+      autocmd FocusLost   * call transparency#set(g:transparency_config.inactive)
+      call transparency#set(g:transparency_config.active)
+    else
+      call transparency#set(100)
+    endif
+  augroup END
+  let s:transparency_enabled = a:flag
+endfunction
+
 if g:transparency_activate
   noremap <silent> <Plug>(TransparencyOn)     :call <SID>install(v:true)<CR>
   noremap <silent> <Plug>(TransparencyOff)    :call <SID>install(v:false)<CR>
-  noremap <silent> <Plug>(TransparencyToggle) :call <SID>install(!g:transparency_enabled)<CR>
+  noremap <silent> <Plug>(TransparencyToggle) :call <SID>install(!<SID>transparency_is_enable())<CR>
   if g:transparency_startup_enable
     call s:install(v:true)
   endif
 endif
 
 if !has('gui_running') && g:transparency_ctermbg_none
-  augroup Transparency
+  " highlight group setting
+  " - initial  : original
+  " - update 1 : import and merge from
+  "              https://github.com/lambdalisue/seethrough.vim
+  function! s:termtrans_set() abort
+    highlight Normal       ctermbg=none
+    highlight NonText      ctermbg=none
+    highlight EndOfBuffer  ctermbg=none
+    highlight Folded       ctermbg=none
+    highlight LineNr       ctermbg=none
+    highlight CursorLineNr ctermbg=NONE
+    highlight SpecialKey   ctermbg=NONE
+  endfunction
+
+  augroup TransparencyCLI
     autocmd!
-    autocmd Colorscheme * highlight Normal      ctermbg=none
-    autocmd Colorscheme * highlight NonText     ctermbg=none
-    autocmd Colorscheme * highlight LineNr      ctermbg=none
-    autocmd Colorscheme * highlight Folded      ctermbg=none
-    autocmd Colorscheme * highlight EndOfBuffer ctermbg=none
+    autocmd ColorScheme * call s:termtrans_set()
   augroup END
+  call s:termtrans_set()
 endif
 
 let &cpo = s:save_cpo
