@@ -92,11 +92,11 @@ if !has('gui_running') && g:transparency_ctermbg_none
   " - update 1 : import and merge from
   "              https://github.com/lambdalisue/seethrough.vim
   function! s:termtrans_set() abort
-    highlight Normal       ctermbg=none
-    highlight NonText      ctermbg=none
-    highlight EndOfBuffer  ctermbg=none
-    highlight Folded       ctermbg=none
-    highlight LineNr       ctermbg=none
+    highlight Normal       ctermbg=NONE
+    highlight NonText      ctermbg=NONE
+    highlight EndOfBuffer  ctermbg=NONE
+    highlight Folded       ctermbg=NONE
+    highlight LineNr       ctermbg=NONE
     highlight CursorLineNr ctermbg=NONE
     highlight SpecialKey   ctermbg=NONE
   endfunction
